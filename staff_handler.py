@@ -19,21 +19,21 @@ def staff_replenishment(name_s: str,sec_name: str,phone: str,spec:str):
 
 
 #+добавить работу
-def add_job(name_job: str,price: str,spec:str):
+def add_job(job_id: str,price: str,spec:str):
     sheet = openpyxl.open("base.xlsx")
     sheet.active = 2
     i = 2
     while sheet.active[f"A{i}"].value:
         i += 1
     sheet.active[f"A{i}"].value = i-1
-    sheet.active[f"B{i}"].value = name_job
+    sheet.active[f"B{i}"].value = job_id
     sheet.active[f"C{i}"].value = price
     sheet.active[f"D{i}"].value = spec
     sheet.save('base.xlsx')
 
 
 #+добавить специализацию
-def specialization(id_sotr: str,vid_rab: str):
+def add_specialization(id_sotr: str,vid_rab: str):
     sheet = openpyxl.open("base.xlsx")
     sheet.active = 1
     i = 2
@@ -45,14 +45,21 @@ def specialization(id_sotr: str,vid_rab: str):
 
 
 #+выбор персонал
-def staff_selection_id():
+def staff_selection_id(spec_trigger = False,job_id = None):
     sheet = openpyxl.open("base.xlsx")
     sheet.active = 0
     i = 2
     print("Пресонал: ")
-    while sheet.active[f"A{i}"].value:
-        print(f'  {sheet.active[f"A{i}"].value}.{sheet.active[f"B{i}"].value} {sheet.active[f"C{i}"].value}')
-        i+=1
+    if spec_trigger == True:
+        while sheet.active[f"A{i}"].value:
+            if sheet.active[f"F{i}"].value and check_specialization(job_id,int(sheet.active[f"A{i}"].value)):
+                print(f'  {sheet.active[f"A{i}"].value}.{sheet.active[f"B{i}"].value} {sheet.active[f"C{i}"].value}')
+            i+=1
+    else:
+        while sheet.active[f"A{i}"].value:
+            if sheet.active[f"F{i}"].value:
+                print(f'  {sheet.active[f"A{i}"].value}.{sheet.active[f"B{i}"].value} {sheet.active[f"C{i}"].value}')
+            i+=1
     id = int(input(f'Введите цифру нужного мастера: '))
     while id > i-2 or id <= 0:
         print("Ошибка такого мастера не существует!")
@@ -93,3 +100,14 @@ def fired_replenishment(id_sotr:int):
     sheet.active = 0
     sheet.active[f"F{id_sotr+1}"].value = 0
     sheet.save('base.xlsx')
+
+
+def check_specialization(job_id,id_sotr):
+    sheet = openpyxl.open("base.xlsx")
+    sheet.active = 1
+    i = 2
+    while sheet.active[f"A{i}"].value:
+        if sheet.active[f"A{i}"].value == id_sotr and sheet.active[f"B{i}"].value == job_id:
+            return True
+        i+=1
+    return False

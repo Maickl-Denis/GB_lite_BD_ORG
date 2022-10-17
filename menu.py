@@ -1,5 +1,6 @@
 import staff_handler as sh
 import client_handler as ch
+import order_handler as oh
 
 
 def menu():
@@ -8,7 +9,7 @@ def menu():
         match num:
             # 1. Продажа
             case 1:
-                pass
+                oh.order_list(sh.job_selection_id(), ch.client_selection_id())
             # 2. Работы с клиентами
             case 2:
                 num1 = clients_menu()
@@ -47,7 +48,7 @@ def menu():
                                 pass
                             # 2. Добавить вид работ
                             case 2:
-                                sh.add_job(input("Введите название работ: "), input("Введите цену работ: "), input("Введите описание: "))
+                                sh.add_job(input("Введите название работ: "), input("Введите стоимость: "), input("Введите описание: "))
                             # 3. Удаление работ
                             case 3:
                                 pass
@@ -55,7 +56,7 @@ def menu():
                                 continue
                     # 5. Добавить специализацию сотруднику
                     case 5:
-                        sh.specialization(
+                        sh.add_specialization(
                             sh.staff_selection_id(), sh.job_selection_id())
                     case 0:
                         continue
