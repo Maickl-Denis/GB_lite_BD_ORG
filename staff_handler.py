@@ -1,3 +1,10 @@
+"""
+Модуль работы с персоналом
+
+"""
+
+
+
 import openpyxl
 from openpyxl import load_workbook
 
@@ -92,7 +99,7 @@ def staff_list():
         if sheet.active[f"F{i}"].value:
             print(f'  {sheet.active[f"A{i}"].value}.{sheet.active[f"B{i}"].value} {sheet.active[f"C{i}"].value} {sheet.active[f"D{i}"].value} {sheet.active[f"E{i}"].value}')
         i+=1
-        
+
 #+Увольнение сотрудника
 def fired_replenishment(id_sotr:int):
     sheet = openpyxl.open("base.xlsx")

@@ -1,3 +1,7 @@
+"""
+Модуль работы с клиентами
+
+"""
 import openpyxl
 from openpyxl import load_workbook
 

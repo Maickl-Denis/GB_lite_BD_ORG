@@ -1,3 +1,9 @@
+"""
+Модуль обработки заказов
+
+"""
+
+
 import openpyxl
 from openpyxl import load_workbook
 import staff_handler as sh
