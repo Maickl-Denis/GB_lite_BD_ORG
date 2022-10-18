@@ -1,17 +1,31 @@
 import staff_handler as sh
 import client_handler as ch
 import order_handler as oh
-
+import os
 
 def menu():
     while True:
+        os.system('cls' if os.name == 'nt' else 'clear')  
         num = first_menu()
         match num:
             # 1. Продажа
             case 1:
-                oh.order_list(sh.job_selection_id(), ch.client_selection_id())
+                os.system('cls' if os.name == 'nt' else 'clear')
+                num1 = order_menu()
+                match num1:
+                    #1. Создать бланк заказа
+                    case 1:
+                        oh.create_order_list()
+                    #2. Список заказов 
+                    case 2:
+                        oh.order_list()
+                    case 0:
+                        continue
+                    case _:
+                        print("Нет такого пункта меню")
             # 2. Работы с клиентами
             case 2:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 num1 = clients_menu()
                 match num1:
                     # 1. Список клиентов
@@ -19,14 +33,14 @@ def menu():
                         ch.client_list()
                     # 2. Добавить клиента
                     case 2:
-                        ch.add_client(input("Введите имя клиента: "), input("Введите фамилию клиента: "),
-                                      input("Введите номер телефона клиента: "), input("Введите описание: "))
+                        ch.add_client()
                     case 0:
                         continue
                     case _:
                         print("Нет такого пункта меню")
             # 3. Работы с персоналом
             case 3:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 num1 = person_menu()
                 match num1:
                     # 1. Список сотрудников
@@ -34,24 +48,22 @@ def menu():
                         sh.staff_list()
                     # 2. Добавить сорудника
                     case 2:
-                        sh.staff_replenishment(input("Введите имя cотрудника: "), input("Введите фамилию cотрудника: "),
-                                               input("Введите номер телефона cотрудника: "), input("Введите специализацию: "))
+                        sh.staff_replenishment()
                     # 3. Увольнение сотрудника
                     case 3:
                         sh.fired_replenishment(sh.staff_selection_id())
                     # 4. Справичник работ
                     case 4:
-                        num = job_menu()
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        num1 = job_menu()
                         match num1:
                             # 1. Список работ
                             case 1:
-                                pass
-                            # 2. Добавить вид работ
+                                sh.work_list()
+                            # 2. Добавить работ
                             case 2:
-                                sh.add_job(input("Введите название работ: "), input("Введите стоимость: "), input("Введите описание: "))
+                                sh.add_job()
                             # 3. Удаление работ
-                            case 3:
-                                pass
                             case 0:
                                 continue
                     # 5. Добавить специализацию сотруднику
@@ -74,7 +86,7 @@ def first_menu():
                         "2. Работы с клиентами\n"
                         "3. Работы с персоналом\n"
                         "0. Выход\n"
-                        "Введите один из вариантов..."))
+                        "Выберете пункт меню:  "))
     except ValueError:
         print("Вы ввели некоректное значение")
         return -1
@@ -90,7 +102,7 @@ def person_menu():
                         "4. Справичник работ\n"
                         "5. Добавить специализацию сотруднику\n"
                         "0. Выход\n"
-                        "Введите один из вариантов..."))
+                        "Выберете пункт меню:  "))
     except ValueError:
         print("Вы ввели некоректное значение")
         return -1
@@ -103,7 +115,7 @@ def clients_menu():
         num = int(input("1. Список клиентов\n"
                         "2. Добавить клиента\n"
                         "0. Выход\n"
-                        "Введите один из вариантов..."))
+                        "Выберете пункт меню:  "))
     except ValueError:
         print("Вы ввели некоректное значение")
         return -1
@@ -115,9 +127,8 @@ def job_menu():
     try:
         num = int(input("1. Список работ\n"
                         "2. Добавить вид работ\n"
-                        "3. Удаление работ\n"
                         "0. Выход\n"
-                        "Введите один из вариантов..."))
+                        "Выберете пункт меню:  "))
     except ValueError:
         print("Вы ввели некоректное значение")
         return -1
@@ -125,3 +136,14 @@ def job_menu():
         return num
 
 
+def order_menu():
+    try:
+        num = int(input("1. Создать бланк заказа\n"
+                        "2. Список заказов\n"
+                        "0. Выход\n"
+                        "Выберете пункт меню:  "))
+    except ValueError:
+        print("Вы ввели некоректное значение")
+        return -1
+    else:
+        return num
