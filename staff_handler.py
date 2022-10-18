@@ -8,6 +8,7 @@
 import os
 import openpyxl
 from openpyxl import load_workbook
+from logger import operation_logger as logg
 
 
 #!добавить персонал
@@ -42,6 +43,7 @@ def staff_replenishment():
     sheet.active[f"E{i}"].value = spec
     sheet.active[f"F{i}"].value = 1
     sheet.save('base.xlsx')
+    logg(f"Добавлен сотрудник: {name} {sec_name}, тел: {phone}. Описание: {spec}")
 
 
 #!добавить работу
@@ -70,6 +72,7 @@ def add_job():
     sheet.active[f"C{i}"].value = price
     sheet.active[f"D{i}"].value = spec
     sheet.save('base.xlsx')
+    logg(f"Добавлена работа: {job_name} Цена: {price}. Описание: {spec}")
 
 
 #!добавить специализацию
@@ -82,7 +85,11 @@ def add_specialization(id_staff: int, id_job: int):
     sheet.active[f"A{i}"].value = id_staff
     sheet.active[f"B{i}"].value = id_job
     sheet.save('base.xlsx')
-    
+    sheet.active = 0
+    lg1 = f'{sheet.active[f"B{id_staff+1}"].value}{sheet.active[f"C{id_staff+1}"].value}'
+    sheet.active = 2
+    lg2 = f'{sheet.active[f"B{id_job+1}"].value}'
+    logg(f"Сотруднику: {lg1} добавлена специализация {lg2}")
 
 
 #!выбор персонал
@@ -170,6 +177,7 @@ def staff_list():
         print(f'{"|":12}{sheet.active[f"A{i}"].value:<14}{"|":6}{sheet.active[f"B{i}"].value:<12}{"|":10}{sheet.active[f"C{i}"].value:<15}{"|":6}{sheet.active[f"D{i}"].value:<20}{"|":4}{sheet.active[f"E{i}"].value:^36}{"|":9}{status:<15}{"|"}')
         i += 1
     print("\033[0m" + ("_" * 160))
+    logg("Выведен список персонала")
     input("Для продолжения работы нажмите Enter...")
 
 #!Увольнение сотрудника
@@ -178,8 +186,10 @@ def fired_replenishment(id_staff:int):
     sheet.active = 0
     sheet.active[f"F{id_staff+1}"].value = 0
     sheet.save('base.xlsx')
+    staf = f'{sheet.active[f"B{id_staff+1}"].value}{sheet.active[f"C{id_staff+1}"].value}'
     print("\033[0m" + ("_" * 160))
-    print("\033[31m"+f"Сотрудник {sheet.active[f'B{id_staff+1}'].value} уволен!"+"\033[0m")
+    print("\033[31m"+f"Сотрудник {staf} уволен(a)!"+"\033[0m")
+    logg(f"Сотруднику: {staf} уволен(a)")
     input("Для продолжения работы нажмите Enter...")
 
 
@@ -193,7 +203,7 @@ def check_specialization(id_staff: int, id_job: int):
         i += 1
     return False
 
-#!Список работа
+#!Список работ
 def work_list():
     sheet = openpyxl.open("base.xlsx")
     sheet.active = 2
@@ -208,4 +218,5 @@ def work_list():
             f'{"|":12}{sheet.active[f"A{i}"].value:<14}{"|":6}{sheet.active[f"B{i}"].value:<30}{"|":10}{sheet.active[f"C{i}"].value:<15}{"|":7}{sheet.active[f"D{i}"].value:^65}{"|"}')
         i += 1
     print("\033[0m" + ("-" * 160))
+    logg("Выведен список работ")
     input("Для продолжения работы нажмите Enter...")

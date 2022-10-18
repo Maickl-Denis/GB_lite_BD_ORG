@@ -4,6 +4,7 @@
 """
 import openpyxl
 from openpyxl import load_workbook
+from logger import operation_logger as logg
 
 
 #!добавить клиента
@@ -38,6 +39,7 @@ def add_client():
     sheet.active[f"D{i}"].value = phone
     sheet.active[f"E{i}"].value = spec
     sheet.save('base.xlsx')
+    logg(f"Добавлен клиент: {name} {sec_name}, тел: {phone}. Описание: {spec}")
 
 
 #!список всех клиентов
@@ -53,6 +55,7 @@ def client_list():
         print(f'{"|":12}{sheet.active[f"A{i}"].value:<14}{"|":6}{sheet.active[f"B{i}"].value:<12}{"|":10}{sheet.active[f"C{i}"].value:<15}{"|":6}{sheet.active[f"D{i}"].value:<20}{"|":4}{sheet.active[f"E{i}"].value:^36}{"|"}')
         i += 1
     print("\033[0m" + ("-" * 136))
+    logg("Выведен список клиентов")
     input("Для продолжения работы нажмите Enter...")
 
 
