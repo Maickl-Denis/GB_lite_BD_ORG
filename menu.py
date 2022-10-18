@@ -2,16 +2,19 @@ import staff_handler as sh
 import client_handler as ch
 import order_handler as oh
 import os
+from logger import operation_logger as logg
 
 def menu():
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')  
-        num = first_menu()
+        num, men = first_menu()
+        logg(f"В главном меню: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
         match num:
             # 1. Продажа
             case 1:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                num1 = order_menu()
+                num1, men = order_menu()
+                logg(f"В меню Продажа: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     #1. Создать бланк заказа
                     case 1:
@@ -21,12 +24,12 @@ def menu():
                         oh.order_list()
                     case 0:
                         continue
-                    case _:
-                        print("Нет такого пункта меню")
+
             # 2. Работы с клиентами
             case 2:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                num1 = clients_menu()
+                num1, men = clients_menu()
+                logg(f"В меню Работа с клиентами: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     # 1. Список клиентов
                     case 1:
@@ -36,12 +39,12 @@ def menu():
                         ch.add_client()
                     case 0:
                         continue
-                    case _:
-                        print("Нет такого пункта меню")
+
             # 3. Работы с персоналом
             case 3:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                num1 = person_menu()
+                num1, men = person_menu()
+                logg(f"В меню Работа с персоналом: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     # 1. Список сотрудников
                     case 1:
@@ -55,7 +58,8 @@ def menu():
                     # 4. Справичник работ
                     case 4:
                         os.system('cls' if os.name == 'nt' else 'clear')
-                        num1 = job_menu()
+                        num1, men = job_menu()
+                        logg(f"В меню Справочник работ: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                         match num1:
                             # 1. Список работ
                             case 1:
@@ -72,78 +76,77 @@ def menu():
                             sh.staff_selection_id(), sh.job_selection_id())
                     case 0:
                         continue
-                    case _:
-                        print("Нет такого пункта меню")
+
             case 0:
+                logg("Программа завершила свою работу")
                 break
-            case _:
-                print("Нет такого пункта меню")
 
 
 def first_menu():
     try:
-        num = int(input("1. Продажа\n"
-                        "2. Работы с клиентами\n"
-                        "3. Работы с персоналом\n"
-                        "0. Выход\n"
+        ls = {1:"Продажа", 2: "Работа с клиентами", 3: "Работа с персоналом", 0: "Выход"}
+        num = int(input(f"1. {ls[1]}\n"
+                        f"2. {ls[2]}\n"
+                        f"3. {ls[3]}\n"
+                        f"0. {ls[0]}\n"
                         "Выберете пункт меню:  "))
     except ValueError:
-        print("Вы ввели некоректное значение")
-        return -1
+        return -1, None
     else:
-        return num
+        return num, ls.get(num)
 
 
 def person_menu():
     try:
-        num = int(input("1. Список сотрудников\n"
-                        "2. Добавить сорудника\n"       
-                        "3. Увольнение сотрудника\n"    
-                        "4. Справичник работ\n"
-                        "5. Добавить специализацию сотруднику\n"
-                        "0. Выход\n"
+        ls = {1:"Список сотрудников", 2: "Добавить сорудника", 3: "Увольнение сотрудника",
+              4: "Справичник работ", 5: "Добавить специализацию сотруднику", 0: "Выход"}
+        num = int(input(f"1. {ls[1]}\n"
+                        f"2. {ls[2]}\n"
+                        f"3. {ls[3]}\n"
+                        f"4. {ls[4]}\n"
+                        f"5. {ls[5]}\n"
+                        f"0. {ls[0]}\n"
                         "Выберете пункт меню:  "))
     except ValueError:
-        print("Вы ввели некоректное значение")
-        return -1
+        return -1, None
     else:
-        return num
+        return num, ls.get(num)
 
 
 def clients_menu():
     try:
-        num = int(input("1. Список клиентов\n"
-                        "2. Добавить клиента\n"
-                        "0. Выход\n"
+        ls = {1: "Список клиентов", 2: "Добавить клиента", 0: "Выход"}
+        num = int(input(f"1. {ls[1]}\n"
+                        f"2. {ls[2]}\n"
+                        f"0. {ls[0]}\n"
                         "Выберете пункт меню:  "))
     except ValueError:
-        print("Вы ввели некоректное значение")
-        return -1
+        return -1, None
     else:
-        return num
+        return num, ls.get(num)
 
 
 def job_menu():
     try:
-        num = int(input("1. Список работ\n"
-                        "2. Добавить вид работ\n"
-                        "0. Выход\n"
+        ls = {1: "Список работ", 2: "Добавить вид работ", 0: "Выход"}
+        num = int(input(f"1. {ls[1]}\n"
+                        f"2. {ls[2]}\n"
+                        f"0. {ls[0]}\n"
                         "Выберете пункт меню:  "))
     except ValueError:
-        print("Вы ввели некоректное значение")
-        return -1
+        return -1, None
     else:
-        return num
+        return num, ls[num]
 
 
 def order_menu():
     try:
-        num = int(input("1. Создать бланк заказа\n"
-                        "2. Список заказов\n"
-                        "0. Выход\n"
+        ls = {1: "Создать бланк заказа", 2: "Список заказов", 0: "Выход"}
+        num = int(input(f"1. {ls[1]}\n"
+                        f"2. {ls[2]}\n"
+                        f"0. {ls[0]}\n"
                         "Выберете пункт меню:  "))
     except ValueError:
-        print("Вы ввели некоректное значение")
-        return -1
+        return -1, None
     else:
-        return num
+        return num, ls[num]

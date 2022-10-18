@@ -4,7 +4,7 @@
 """
 
 
-
+from logger import operation_logger as logg
 import openpyxl
 
 def cr_db():
@@ -77,3 +77,4 @@ def cr_db():
     wb.active[f"D1"].value = "Номер мастера"
     wb.active[f"E1"].value = "Номер клиента"
     wb.save('base.xlsx')
+    logg("База данных, создана")
