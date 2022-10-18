@@ -8,13 +8,13 @@ def menu():
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')  
         num, men = first_menu()
-        logg(f"В главном меню: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
+        logg(f"В главном меню: {'выбран раздел' if men else 'введены не коректные данные'} {men if men else ''}")
         match num:
             # 1. Продажа
             case 1:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 num1, men = order_menu()
-                logg(f"В меню Продажа: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
+                logg(f"В меню Продажа: {'выбран раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     #1. Создать бланк заказа
                     case 1:
@@ -29,7 +29,7 @@ def menu():
             case 2:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 num1, men = clients_menu()
-                logg(f"В меню Работа с клиентами: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
+                logg(f"В меню Работа с клиентами: {'выбран раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     # 1. Список клиентов
                     case 1:
@@ -44,7 +44,7 @@ def menu():
             case 3:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 num1, men = person_menu()
-                logg(f"В меню Работа с персоналом: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
+                logg(f"В меню Работа с персоналом: {'выбран раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                 match num1:
                     # 1. Список сотрудников
                     case 1:
@@ -59,7 +59,7 @@ def menu():
                     case 4:
                         os.system('cls' if os.name == 'nt' else 'clear')
                         num1, men = job_menu()
-                        logg(f"В меню Справочник работ: {'выбрано раздел' if men else 'введены не коректные данные'} {men if men else ''}")
+                        logg(f"В меню Справочник работ: {'выбран раздел' if men else 'введены не коректные данные'} {men if men else ''}")
                         match num1:
                             # 1. Список работ
                             case 1:
