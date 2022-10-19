@@ -18,24 +18,23 @@ def staff_replenishment():
     i = 2
     while sheet.active[f"A{i}"].value:
         i += 1
+    print("\033[0m" + ("_" * 160))
     name = input("\033[1m" + "Введите имя сотрудника: ")
-    name = "-" if len(name) == 0 else name
-    while name.isdigit():
+    while len(name) == 0 or name.isdigit():
         name = input(f'\033[31m{"Ошибка!"}\n'
                          f'\033[0m\033[1m{"Введите имя сотрудника: "}')
-        name = "-" if len(name) == 0 else name
     sec_name = input("\033[1m" + "Введите фамилию сотрудника: ")
-    sec_name = "-" if len(sec_name) == 0 else sec_name
-    while sec_name.isdigit():
+    while len(sec_name) == 0 or sec_name.isdigit():
         sec_name = input(f'\033[31m{"Ошибка!"}\n'
                       f'\033[0m\033[1m{"Введите фамилию сотрудника: "}')
-        sec_name = "-" if len(sec_name) == 0 else sec_name
     phone = input("\033[1m" + "Введите номер телефона сотрудника: ")
     while not phone.isdigit():
         phone = input(f'\033[31m{"Ошибка!"}\n'
                       f'\033[0m\033[1m{"Введите номер телефона сотрудника: "}')
-    spec = input("\033[1m" + "Введите описание: ")
-    spec = "-" if len(spec) == 0 else spec
+    spec = input("\033[1m" + "Введите описание: "+"\033[0m")
+    while len(spec) == 0:
+        spec = input(f'\033[31m{"Ошибка!"}\n'
+                      f'\033[0m\033[1m{"Введите описание: "}\033[0m')
     sheet.active[f"A{i}"].value = i-1
     sheet.active[f"B{i}"].value = name
     sheet.active[f"C{i}"].value = sec_name
@@ -55,18 +54,17 @@ def add_job():
     while sheet.active[f"A{i}"].value:
         i += 1
     job_name = input("\033[1m" + "Введите название работы: ")
-    job_name = "-" if len(job_name) == 0 else job_name
-    while job_name.isdigit():
+    while len(job_name) == 0 or job_name.isdigit():
         job_name = input(f'\033[31m{"Ошибка!"}\n'
-                   f'\033[0m\033[1m{"Введите название работы: "}')
-        job_name = "-" if len(job_name) == 0 else job_name
+                         f'\033[0m\033[1m{"Введите название работы: "}')
     price = input("\033[1m" + "Введите стоимость: ")
     while not price.isdigit():
         price = input(f'\033[31m{"Ошибка!"}\n'
                          f'\033[0m\033[1m{"Введите стоимость: "}')
-
-    spec = input("\033[1m" + "Введите описание: ")
-    spec = "-" if len(spec) == 0 else spec
+    spec = input("\033[1m" + "Введите описание: " + "\033[0m")
+    while len(spec) == 0:
+        spec = input(f'\033[31m{"Ошибка!"}\n'
+                     f'\033[0m\033[1m{"Введите описание: "}\033[0m')
     sheet.active[f"A{i}"].value = i-1
     sheet.active[f"B{i}"].value = job_name
     sheet.active[f"C{i}"].value = price
@@ -77,19 +75,31 @@ def add_job():
 
 #!добавить специализацию
 def add_specialization(id_staff: int, id_job: int):
-    sheet = openpyxl.open("base.xlsx")
-    sheet.active = 1
-    i = 2
-    while sheet.active[f"A{i}"].value:
-        i += 1
-    sheet.active[f"A{i}"].value = id_staff
-    sheet.active[f"B{i}"].value = id_job
-    sheet.save('base.xlsx')
-    sheet.active = 0
-    lg1 = f'{sheet.active[f"B{id_staff+1}"].value}{sheet.active[f"C{id_staff+1}"].value}'
-    sheet.active = 2
-    lg2 = f'{sheet.active[f"B{id_job+1}"].value}'
-    logg(f"Сотруднику: {lg1} добавлена специализация {lg2}")
+    while True:
+        sheet = openpyxl.open("base.xlsx")
+        sheet.active = 1
+        i = 2
+        while sheet.active[f"A{i}"].value:
+            if sheet.active[f"A{i}"].value == id_staff and sheet.active[f"B{i}"].value == id_job:
+                print("\033[0m" + ("_" * 160))
+                print((f'\033[31m{"Ошибка! У сотрудника уже имеется данная специализация"}\033[0m'))
+                sheet.active = 0
+                lg1 = f'{sheet.active[f"B{id_staff + 1}"].value}{sheet.active[f"C{id_staff + 1}"].value}'
+                sheet.active = 2
+                lg2 = f'{sheet.active[f"B{id_job + 1}"].value}'
+                logg(f"Ошибка! у сотрудника: {lg1} уже добавлена специализация {lg2}")
+                print("\033[0m" + ("_" * 160))
+                input("Для продолжения работы нажмите Enter...")
+                return
+            i += 1
+        sheet.active[f"A{i}"].value = id_staff
+        sheet.active[f"B{i}"].value = id_job
+        sheet.save('base.xlsx')
+        sheet.active = 0
+        lg1 = f'{sheet.active[f"B{id_staff+1}"].value}{sheet.active[f"C{id_staff+1}"].value}'
+        sheet.active = 2
+        lg2 = f'{sheet.active[f"B{id_job+1}"].value}'
+        logg(f"Сотруднику: {lg1} добавлена специализация {lg2}")
 
 
 #!выбор персонал
@@ -156,7 +166,7 @@ def job_selection_id():
             f'  {sheet.active[f"A{i}"].value}.{sheet.active[f"B{i}"].value} {sheet.active[f"C{i}"].value}')
         i += 1
     print("\033[0m" + ("_" * 160))
-    id = input(f'\033[1m{"Введите цифру нужной работы: "}')
+    id = input(f'\033[1m{"Введите цифру нужной работы: "}\033[0m')
     while not id.isdigit() or int(id) > i - 2 or int(id) <= 0:
         id = input(f'\033[31m{"Ошибка!"}\n'
                    f'\033[0m\033[1m{"Введите цифру нужной работы: "}')
@@ -190,6 +200,7 @@ def fired_replenishment(id_staff:int):
     print("\033[0m" + ("_" * 160))
     print("\033[31m"+f"Сотрудник {staf} уволен(a)!"+"\033[0m")
     logg(f"Сотруднику: {staf} уволен(a)")
+    print("\033[0m" + ("_" * 160))
     input("Для продолжения работы нажмите Enter...")
 
 

@@ -14,25 +14,23 @@ def add_client():
     i = 2
     while sheet.active[f"A{i}"].value:
         i += 1
+    print("\033[0m" + ("_" * 160))
     name = input("\033[1m" + "Введите имя клиента: ")
-    name = "-" if len(name) == 0 else name
-    while name.isdigit():
+    while len(name) == 0 or name.isdigit():
         name = input(f'\033[31m{"Ошибка!"}\n'
                      f'\033[0m\033[1m{"Введите имя клиента: "}')
-        name = "-" if len(name) == 0 else name
-
     sec_name = input("\033[1m" + "Введите фамилию клиента: ")
-    sec_name = "-" if len(sec_name) == 0 else sec_name
-    while sec_name.isdigit():
+    while len(sec_name) == 0 or sec_name.isdigit():
         sec_name = input(f'\033[31m{"Ошибка!"}\n'
                          f'\033[0m\033[1m{"Введите фамилию клиента: "}')
-        sec_name = "-" if len(sec_name) == 0 else sec_name
     phone = input("\033[1m" + "Введите номер телефона клиента: ")
     while not phone.isdigit():
         phone = input(f'\033[31m{"Ошибка!"}\n'
                       f'\033[0m\033[1m{"Введите номер телефона клиента: "}')
-    spec = input("\033[1m" + "Введите описание: ")
-    spec = "-" if len(spec) == 0 else spec
+    spec = input("\033[1m" + "Введите описание: "+"\033[0m")
+    while len(spec) == 0:
+        spec = input(f'\033[31m{"Ошибка!"}\n'
+                     f'\033[0m\033[1m{"Введите описание: "}\033[0m')
     sheet.active[f"A{i}"].value = i-1
     sheet.active[f"B{i}"].value = name
     sheet.active[f"C{i}"].value = sec_name
@@ -73,11 +71,10 @@ def client_selection_id():
             i += 1
         print("\033[31m" + "  0.Добавить клиента")
         print("\033[0m" + ("_" * 160))
-        id = input(f'\033[1m{"Введите цифру клиента: "}')
+        id = input(f'\033[1m{"Введите цифру клиента: "}\033[0m')
         if int(id) == 0:
             print("\033[0m" + ("_" * 160) + "\033[1m")
-            add_client(input("Введите имя клиента: "), input("Введите фамилию клиента: "),
-                       input("Введите номер телефона клиента: "), input("Введите описание: "))
+            add_client()
             continue
         while not id.isdigit() or int(id) > i - 2 or int(id) < 0:
             id = input(f'\033[31m{"Ошибка!"}\n'
